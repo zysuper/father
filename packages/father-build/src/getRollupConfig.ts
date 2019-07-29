@@ -50,6 +50,7 @@ export default function(opts: IGetRollupConfigOpts): RollupOptions[] {
     extraExternals = [],
     nodeVersion,
     typescriptOpts,
+    nodeResolveOpts = {},
   } = bundleOpts;
   const entryExt = extname(entry);
   const name = file || basename(entry, entryExt);
@@ -65,6 +66,7 @@ export default function(opts: IGetRollupConfigOpts): RollupOptions[] {
   const runtimeHelpers = type === 'cjs' ? false : runtimeHelpersOpts;
   const babelOpts = {
     ...getBabelConfig({
+      type,
       target: type === 'esm' ? 'browser' : target,
       typescript: false,
       runtimeHelpers,
@@ -141,6 +143,7 @@ export default function(opts: IGetRollupConfigOpts): RollupOptions[] {
     nodeResolve({
       mainFields: ['module', 'jsnext:main', 'main'],
       extensions,
+      ...nodeResolveOpts,
     }),
     ...(isTypeScript
       ? [
